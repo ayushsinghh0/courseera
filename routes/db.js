@@ -5,7 +5,7 @@ mongoose.connect("mongodb+srv://admin:ayushsingh@cluster0.puqfpej.mongodb.net/co
 const schema=mongoose.Schema;
 
 const userSchema=new schema({
-    email:{ type: String, unique:true },
+    email: String,
     password:String,
     firstName:String,
     lastName:String
@@ -36,13 +36,13 @@ const purchaseSchema=new schema({
 
 })
 
-const usermodel=mongoose.model("user",userSchema);
+const userModel=mongoose.model("user",userSchema);
 const adminmodel=mongoose.model("admin",adminSchema);
 const coursemodel=mongoose.model("course",courseSchema);
 const purchasemodel=mongoose.model("purchase",purchaseSchema);
 
 module.exports={
-    usermodel,
+    userModel,
     adminmodel,
     coursemodel,
     purchasemodel
