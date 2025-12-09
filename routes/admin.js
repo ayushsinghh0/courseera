@@ -1,7 +1,7 @@
 const { Router }=require("express");
 const adminRouter=Router();
 const jwt=require("jsonwebtoken");
-const secret="ayush";
+const { ADMIN_SECRET } =require("../config")
 const Zod=require("zod");
 const bcrypt=require("bcryptjs");
 const { adminmodel:adminModel } =require("./db");
@@ -59,7 +59,7 @@ adminRouter.get("/signin",async function(req,res){
     if(admin){
         const token=jwt.sign({
             id:admin._id
-        },secret);
+        },ADMIN_SECRET);
 
         res.json({
              msg: "Signin successful",

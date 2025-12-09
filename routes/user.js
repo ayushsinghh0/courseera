@@ -1,7 +1,7 @@
 const { Router }=require("express");
 const userRouter=Router();
 const jwt=require("jsonwebtoken");
-const secret="ayushsingh";
+const { USER_SECRET }= require("../config");
 const Zod=require("zod");
 const bcrypt=require("bcryptjs");
 const { userModel } =require("./db");
@@ -59,7 +59,7 @@ userRouter.post("/signin",async function(req,res){
         if(user){
             const token=jwt.sign({
                 id:user._id
-            },secret);
+            },USER_SECRET);
     
             res.json({
                  msg: "Signin successful",
