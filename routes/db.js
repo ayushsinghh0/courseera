@@ -12,7 +12,7 @@ const userSchema=new schema({
 })
 
 const adminSchema=new schema({
-     email:String,
+    email:{type: String,unique: true},
     password:String,
     firstName:String,
     lastName:String
@@ -21,7 +21,6 @@ const adminSchema=new schema({
 
 const courseSchema=new schema({
     title:String,
-    courseId:String,
     description:String,
     price:Number,
     createrid:ObjectId,
@@ -37,13 +36,13 @@ const purchaseSchema=new schema({
 })
 
 const userModel=mongoose.model("user",userSchema);
-const adminmodel=mongoose.model("admin",adminSchema);
-const coursemodel=mongoose.model("course",courseSchema);
-const purchasemodel=mongoose.model("purchase",purchaseSchema);
+const adminModel=mongoose.model("admin",adminSchema);
+const courseModel=mongoose.model("course",courseSchema);
+const purchaseModel=mongoose.model("purchase",purchaseSchema);
 
 module.exports={
     userModel,
-    adminmodel,
-    coursemodel,
-    purchasemodel
+    adminModel,
+    courseModel,
+    purchaseModel
 }

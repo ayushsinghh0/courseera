@@ -5,6 +5,7 @@ const { USER_SECRET }= require("../config");
 const Zod=require("zod");
 const bcrypt=require("bcryptjs");
 const { userModel } =require("./db");
+const { userMiddleware }=require("../midleware/user")
 
 
 

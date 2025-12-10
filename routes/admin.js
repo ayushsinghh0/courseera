@@ -4,7 +4,8 @@ const jwt=require("jsonwebtoken");
 const { ADMIN_SECRET } =require("../config")
 const Zod=require("zod");
 const bcrypt=require("bcryptjs");
-const { adminmodel:adminModel } =require("./db");
+const { adminModel, courseModel } =require("./db");
+const { adminMiddleWare }=require("../midleware/admin")
 
 
 //login,signup,create a course, delete a corse,add course content
@@ -75,22 +76,25 @@ adminRouter.get("/signin",async function(req,res){
 
 })
 
-adminRouter.post("/course",function(req,res){
+adminRouter.post("/course",adminMiddleWare,async function(req,res){
+    adminId=req.userId;
+
+    const { title, description,imageUrl,price}=req.body;
+    await courseModel.create({
+        title,description,imageUrl,createrid:adminId,price
+    })
+    
     res.json({
-        msg: "course added successful"
+        Message:"course created",
+        courseId: course._id
     })
 })
 
-adminRouter.delete("/course",function(req,res){
-    res.json({
-        msg: "course deleted successful"
-    })
-})
 
+adminRouter.put("/course",adminMiddleWare,async function(req,res){
+    const {title, description,imageUrl,price}=req.body;
+    await findOne.courseModel({
 
-adminRouter.put("/course",function(req,res){
-    res.json({
-        msg: "course deleted successful"
     })
 })
 
