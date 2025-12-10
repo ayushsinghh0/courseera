@@ -1,5 +1,5 @@
-const USER_SECRET="ayushsingh";
-const ADMIN_SECRET="ayush";
+const USER_SECRET=process.env.USER_SECRET;
+const ADMIN_SECRET=process.env.ADMIN_SECRET;
 
 
 module.exports={

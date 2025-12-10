@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 const ObjectId=mongoose.Schema.Types.ObjectId;
-mongoose.connect("mongodb+srv://admin:ayushsingh@cluster0.puqfpej.mongodb.net/coursera")
+mongoose.connect(process.env.MONGO_URL)
 
 const schema=mongoose.Schema;
 
