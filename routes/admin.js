@@ -5,7 +5,7 @@ const { ADMIN_SECRET } =require("../config")
 const Zod=require("zod");
 const bcrypt=require("bcryptjs");
 const { adminModel, courseModel } =require("./db");
-const { adminMiddleWare }=require("../midleware/admin")
+const { adminMiddleware }=require("../midleware/admin")
 
 
 //login,signup,create a course, delete a corse,add course content
@@ -15,26 +15,26 @@ adminRouter.post("/signup",async function(req,res){
         email:Zod.string(),
         password: Zod.string(),
 
-        firstname: Zod.string(),
-        lastname: Zod.string(),
+        firstName: Zod.string(),
+        lastName: Zod.string(),
     })
 
     const valid = neededbody.safeParse(req.body);
     if(!valid.success){
-        res.json({
+        return res.json({
             msg:"invalid context"
         })
     }
-    const firstname=req.body.firstname;
-    const lastname=req.body.lastname;
+    const firstName=req.body.firstName;
+    const lastName=req.body.lastName;
     const email=req.body.email;
     const password=req.body.password;
 
     const newpassword=await bcrypt.hash(password,5);
 
     await adminModel.create({
-        firstname:firstname,
-        lastname:lastname,
+        firstName:firstName,
+        lastName:lastName,
         email:email,
         password:newpassword
     })
@@ -44,44 +44,36 @@ adminRouter.post("/signup",async function(req,res){
 
 })
 
-adminRouter.get("/signin",async function(req,res){
+adminRouter.post("/signin",async function(req,res){
     const email=req.body.email;
     const password=req.body.password;
 
     const admin=await adminModel.findOne({
         email:email
     })
-    const check=bcrypt.compare(password,admin.password);
+    const check=await bcrypt.compare(password,admin.password);
     if(!check){
-        res.json({
+       return  res.json({
             msg:"incorrect password"
         })
     }
-    if(admin){
+    
         const token=jwt.sign({
             id:admin._id
         },ADMIN_SECRET);
 
         res.json({
              msg: "Signin successful",
-            token:true
+            token
         })
-    }
-    else{
-        res.json({
-            msg:"invalid"
-        })
-    }
-
-
 })
 
-adminRouter.post("/course",adminMiddleWare,async function(req,res){
-    adminId=req.userId;
+adminRouter.post("/course",adminMiddleware,async function(req,res){
+    const adminId=req.userId;
 
     const { title, description,imageUrl,price}=req.body;
-    await courseModel.create({
-        title,description,imageUrl,createrid:adminId,price
+    const course=await courseModel.create({
+        title,description,imageUrl,creatorid:adminId,price
     })
     
     res.json({
@@ -91,14 +83,32 @@ adminRouter.post("/course",adminMiddleWare,async function(req,res){
 })
 
 
-adminRouter.put("/course",adminMiddleWare,async function(req,res){
-    const {title, description,imageUrl,price}=req.body;
-    await findOne.courseModel({
+ adminRouter.put("/course",async function(req,res){
+    const adminId=req.userId;
+    const {title, description,imageUrl,price,courseId}=req.body;
+    const course=await courseModel.updateOne({
+        _id:courseId,
+        creatorid:adminId
+    },{
+        title,description,imageUrl,creatorid:adminId,price
 
     })
+    res.json({
+        Message:"course updated",
+        courseId:course._id
+    })
 })
+ 
+adminRouter.get("/course/bulk",async function(req,res){
+    const adminId= req.userId;
 
-adminRouter.get("/course/bulk",function(req,res){
+    const course=await courseModel.find({
+        creatorID:adminId
+    })
+    res.json({
+        message:"course updated",
+        course
+    })
 
 })
 

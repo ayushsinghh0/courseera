@@ -1,18 +1,17 @@
 const mongoose=require("mongoose");
 const ObjectId=mongoose.Schema.Types.ObjectId;
-mongoose.connect(process.env.MONGO_URL)
 
 const schema=mongoose.Schema;
 
 const userSchema=new schema({
-    email: String,
+    email: { type: String, required: true, unique: true },
     password:String,
     firstName:String,
     lastName:String
 })
 
 const adminSchema=new schema({
-    email:{type: String,unique: true},
+    email:{ type: String, required: true, unique: true },
     password:String,
     firstName:String,
     lastName:String
@@ -24,7 +23,7 @@ const courseSchema=new schema({
     description:String,
     price:Number,
     createrid:ObjectId,
-    imageurl:String
+    imageUrl:String
 
 })
 
